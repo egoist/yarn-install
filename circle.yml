@@ -1,8 +1,18 @@
 machine:
+  pre:
+    - mkdir ~/.yarn-cache
   node:
     version: 5
 
+dependencies:
+  pre:
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
+  cache_directories:
+    - "~/.yarn-cache"
+  override:
+    - yarn install
+
 test:
   override:
-    - nvm use 4 && npm test
-    - nvm use 5 && npm test
+    - nvm use 4 && yarn run test
+    - nvm use 5 && yarn run test
