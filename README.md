@@ -35,6 +35,12 @@ install(options)
 
 #### options
 
+##### cwd
+
+Type: `string`
+
+The directory to run the command.
+
 ##### registry
 
 Type: `string`  
