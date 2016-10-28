@@ -2,7 +2,7 @@
 'use strict'
 const spawn = require('cross-spawn')
 
-// const install = require('npm-or-yarn')
+// const install = require('yarn-install)
 //
 // with dependencies
 // install(['webpack', 'ava'], {saveDev: true})
