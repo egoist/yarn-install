@@ -13,7 +13,7 @@ $ npm install --save yarn-install
 ```js
 const install = require('yarn-install')
 
-const result = npmOrYarn(['webpack', 'mocha'])
+const result = install(['webpack', 'mocha'])
 //=> result, returned by child_process.spawnSync
 ```
 
