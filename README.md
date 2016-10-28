@@ -47,7 +47,7 @@ Type: `string`
 
 Specfic a custom npm registry to use.
 
-##### saveDev
+##### dev
 
 Type: `boolean`
 
