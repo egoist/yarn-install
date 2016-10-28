@@ -19,7 +19,8 @@
     "index.js"
   ],
   "keywords": [
-    ""
+    "yarn",
+    "install"
   ],
   "devDependencies": {
     "eslint": "latest",
