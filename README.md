@@ -1,6 +1,6 @@
-# yarn-install
+# yarn-install [![NPM version](https://img.shields.io/npm/v/yarn-install.svg?style=flat-square)](https://npmjs.com/package/yarn-install) [![NPM downloads](https://img.shields.io/npm/dm/yarn-install.svg?style=flat-square)](https://npmjs.com/package/yarn-install) [![Build Status](https://img.shields.io/circleci/project/egoist/yarn-install/master.svg?style=flat-square)](https://circleci.com/gh/egoist/yarn-install)
 
-[![NPM version](https://img.shields.io/npm/v/yarn-install.svg?style=flat-square)](https://npmjs.com/package/yarn-install) [![NPM downloads](https://img.shields.io/npm/dm/yarn-install.svg?style=flat-square)](https://npmjs.com/package/yarn-install) [![Build Status](https://img.shields.io/circleci/project/egoist/yarn-install/master.svg?style=flat-square)](https://circleci.com/gh/egoist/yarn-install)
+If command `yarn` exists it uses Yarn to install, otherwise fallbacks to npm.
 
 ## Install
 
@@ -11,30 +11,47 @@ $ npm install --save yarn-install
 ## Usage
 
 ```js
-const npmOrYarn = require('yarn-install')
+const install = require('yarn-install')
 
-npmOrYarn('unicorns')
-//=> 'unicorns & rainbows'
+const result = npmOrYarn(['webpack', 'mocha'])
+//=> result, returned by child_process.spawnSync
 ```
 
 ## API
 
-### npmOrYarn(input, [options])
+### install(dependencies, [options])
 
-#### input
+#### dependencies
 
-Type: `string`
+Type: `array`
 
-Lorem ipsum.
+An array of dependencies to install, you can omit it to install dependencies in `package.json`. If `dependencies` is present, it defaults to `--save` mode.
+
+```js
+install(['ava', 'koa'], options)
+// or
+install(options)
+```
 
 #### options
 
-##### foo
+##### registry
 
-Type: `boolean`  
-Default: `false`
+Type: `string`  
 
-Lorem ipsum.
+Specfic a custom npm registry to use.
+
+##### saveDev
+
+Type: `boolean`
+
+Use `--dev` for Yarn and `--save-dev` for npm.
+
+##### global
+
+Type: `boolean`
+
+Install globally, stands for `--global`.
 
 ## Contributing
 

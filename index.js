@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 'use strict'
 const spawn = require('cross-spawn')
 
@@ -25,21 +26,23 @@ module.exports = function (deps, opts) {
 
   const yarnInstallType = deps ? 'add' : 'install'
 
-  const spawnOptions = {
+  const getSpawnOptions = type => ({
     stdio,
-    cwd
-  }
+    cwd,
+    env: getEnv(opts, type)
+  })
 
   let result = spawn.sync(
     'yarn',
     [yarnInstallType].concat(getArgs(deps, opts, 'yarn')),
-    spawnOptions
+    getSpawnOptions('yarn')
   )
+
   if (result.error && result.error.code === 'ENOENT') {
     result = spawn.sync(
       'npm',
       ['install'].concat(getArgs(deps, opts, 'npm')),
-      spawnOptions
+      getSpawnOptions('npm')
     )
   }
 
@@ -51,9 +54,19 @@ function getArgs(deps, opts, type) {
   if (opts.dev) {
     const arg = type === 'yarn' ? '-' : '--save'
     append.push(arg + '-dev')
-  }
-  if (opts.global) {
+  } else if (opts.global) {
     append.push('--global')
+  } else if (type === 'npm') {
+    append.push('--save')
   }
   return deps ? deps.concat(append) : []
+}
+
+function getEnv(opts, type) {
+  const env = Object.assign({}, process.env)
+  if (opts.registry) {
+    if (type === 'yarn') env.yarn_registry = opts.registry
+    else if (type === 'npm') env.npm_config_registry = opts.registry
+  }
+  return env
 }

@@ -5,7 +5,11 @@ const install = require('../')
 
 const fixture = path.join(__dirname, 'fixture/')
 
-const requireFixturePkg = () => require(path.join(fixture, 'package.json'))
+const requireFixturePkg = () => {
+  const file = path.join(fixture, 'package.json')
+  return require(file)
+}
+
 const requireInFixture = name => require(path.join(fixture, 'node_modules', name))
 
 afterEach(() => {
@@ -22,8 +26,7 @@ afterEach(() => {
 })
 
 test('save', () => {
-  console.log(requireFixturePkg())
-  const res = install(['pokemon'], {cwd: fixture})
+  install(['pokemon'], {cwd: fixture, registry: 'https://registry.npm.taobao.org'})
   const pokemon = requireInFixture('pokemon')
   expect(pokemon.getName(147)).toBe('Dratini')
   const pkg = requireFixturePkg()
@@ -31,10 +34,9 @@ test('save', () => {
 })
 
 test('save dev', () => {
-  const res = install(['pokemon'], {cwd: fixture, dev: true})
+  install(['pokemon'], {cwd: fixture, dev: true, registry: 'https://registry.npm.taobao.org'})
   const pokemon = requireInFixture('pokemon')
   expect(pokemon.getName(147)).toBe('Dratini')
   const pkg = requireFixturePkg()
-  console.log(pkg)
   expect(Object.keys(pkg.devDependencies)).toEqual(['pokemon'])
 })

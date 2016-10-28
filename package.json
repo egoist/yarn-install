@@ -13,7 +13,7 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "jest && eslint *.js"
+    "test": "jest -i && eslint *.js __test__/*.js"
   },
   "files": [
     "index.js"
@@ -32,7 +32,10 @@
     "testEnvironment": "node"
   },
   "eslintConfig": {
-    "extends": "egoist/esnext"
+    "extends": "egoist/esnext",
+    "env": {
+      "jest": true
+    }
   },
   "dependencies": {
     "cross-spawn": "^4.0.2"
