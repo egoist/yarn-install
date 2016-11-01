@@ -73,11 +73,17 @@ module.exports = function (deps, opts) {
     console.log('>', command, args.join(' '))
   }
 
-  return spawn.sync(command, args, {
+  const result = spawn.sync(command, args, {
     stdio,
     cwd,
     env: getEnv(opts, isYarn)
   })
+
+  // set the error code
+  // make sure the same behavior as in yarn and npm
+  if (result.status !== 0) process.exitCode = result.status
+
+  return result
 }
 
 function checkYarnInstalled() {
