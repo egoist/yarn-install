@@ -26,7 +26,11 @@ afterEach(() => {
 })
 
 test('save', () => {
-  install(['pokemon'], {cwd: fixture, registry: 'https://registry.npm.taobao.org'})
+  install(['pokemon'], {
+    cwd: fixture,
+    registry: 'https://registry.npm.taobao.org',
+    showCommand: true
+  })
   const pokemon = requireInFixture('pokemon')
   expect(pokemon.getName(147)).toBe('Dratini')
   const pkg = requireFixturePkg()
@@ -34,7 +38,12 @@ test('save', () => {
 })
 
 test('save dev', () => {
-  install(['pokemon'], {cwd: fixture, dev: true, registry: 'https://registry.npm.taobao.org'})
+  install(['pokemon'], {
+    cwd: fixture,
+    dev: true,
+    registry: 'https://registry.npm.taobao.org',
+    showCommand: true
+  })
   const pokemon = requireInFixture('pokemon')
   expect(pokemon.getName(147)).toBe('Dratini')
   const pkg = requireFixturePkg()

@@ -17,6 +17,21 @@ const result = install(['webpack', 'mocha'])
 //=> result, returned by child_process.spawnSync
 ```
 
+## CLI
+
+```bash
+yarn global add yarn-install
+
+# then you will have `yarn-install` & `yarn-remove` commands
+yarn-install pokemon --dev
+yarn-install yo --global
+yarn-remove xo
+# don't forget that `yarn-install` with dependencies is always `--save` by default.
+
+yarn-install help
+yarn-remove help
+```
+
 ## API
 
 ### install(dependencies, [options])
@@ -58,6 +73,13 @@ Use `--dev` for Yarn and `--save-dev` for npm.
 Type: `boolean`
 
 Install globally, stands for `--global`.
+
+##### remove
+
+Type: `boolean`<br>
+Default: `false`
+
+The reversed behavior to `install`, ie. `yarn remove` and `npm uninstall`
 
 ## Contributing
 

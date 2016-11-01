@@ -2,6 +2,9 @@
 'use strict'
 const spawn = require('cross-spawn')
 
+// cache the install check result
+let yarnInstalled
+
 // const install = require('yarn-install)
 //
 // with dependencies
@@ -12,6 +15,10 @@ const spawn = require('cross-spawn')
 // omit dependencies
 // it runs npm install or yarn install directly
 // install(options)
+//
+// remove dependencies
+// install(['webpack'], {remove: true})
+// install(['webpack'], {remove: true, global: true})
 module.exports = function (deps, opts) {
   // first argument is not an array
   // then treat it as opts
@@ -24,49 +31,71 @@ module.exports = function (deps, opts) {
   const cwd = opts.cwd
   const stdio = opts.stdio === undefined ? 'inherit' : opts.stdio
 
-  const yarnInstallType = deps ? 'add' : 'install'
+  const isYarn = yarnInstalled === undefined ?
+    checkYarnInstalled() :
+    yarnInstalled
 
-  const getSpawnOptions = type => ({
+  const command = isYarn ? 'yarn' : 'npm'
+
+  let args
+  if (isYarn) {
+    args = getArgs({
+      // yarn global
+      global: opts.global,
+      // yarn add
+      add: deps && !opts.remove,
+      // yarn install
+      install: !deps && !opts.remove,
+      // yarn remove
+      remove: opts.remove,
+      // yarn --dev
+      '--dev': opts.dev
+    })
+  } else {
+    args = getArgs({
+      // npm install
+      install: !opts.remove,
+      // npm uninstall
+      uninstall: opts.remove,
+      '--save': !opts.dev && !opts.global,
+      // npm --save0dev
+      '--save-dev': opts.dev,
+      // npm --global
+      '--global': opts.global
+    })
+  }
+
+  if (deps) {
+    args = args.concat(deps)
+  }
+
+  if (opts.showCommand) {
+    console.log('>', command, args.join(' '))
+  }
+
+  return spawn.sync(command, args, {
     stdio,
     cwd,
-    env: getEnv(opts, type)
+    env: getEnv(opts, isYarn)
   })
-
-  let result = spawn.sync(
-    'yarn',
-    [yarnInstallType].concat(getArgs(deps, opts, 'yarn')),
-    getSpawnOptions('yarn')
-  )
-
-  if (result.error && result.error.code === 'ENOENT') {
-    result = spawn.sync(
-      'npm',
-      ['install'].concat(getArgs(deps, opts, 'npm')),
-      getSpawnOptions('npm')
-    )
-  }
-
-  return result
 }
 
-function getArgs(deps, opts, type) {
-  const append = []
-  if (opts.dev) {
-    const arg = type === 'yarn' ? '-' : '--save'
-    append.push(arg + '-dev')
-  } else if (opts.global) {
-    append.push('--global')
-  } else if (type === 'npm') {
-    append.push('--save')
-  }
-  return deps ? deps.concat(append) : []
+function checkYarnInstalled() {
+  const command = spawn.sync('yarn', ['--version'])
+  const installed = command.stdout && command.stdout.toString().trim()
+  yarnInstalled = installed
+  return installed
 }
 
-function getEnv(opts, type) {
+function getArgs(obj) {
+  return Object.keys(obj).filter(name => obj[name])
+}
+
+function getEnv(opts, isYarn) {
   const env = Object.assign({}, process.env)
   if (opts.registry) {
-    if (type === 'yarn') env.yarn_registry = opts.registry
-    else if (type === 'npm') env.npm_config_registry = opts.registry
+    if (isYarn) env.yarn_registry = opts.registry
+    else env.npm_config_registry = opts.registry
   }
   return env
 }
