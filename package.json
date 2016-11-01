@@ -1,6 +1,6 @@
 {
   "name": "yarn-install",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Install dependencies using Yarn with npm fallback.",
   "license": "MIT",
   "repository": "egoist/yarn-install",
