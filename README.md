@@ -72,7 +72,7 @@ Use `--dev` for Yarn and `--save-dev` for npm.
 
 Type: `boolean`
 
-Install globally, stands for `--global`.
+Install globally, stands for `npm --global` or `yarn global`.
 
 ##### remove
 
