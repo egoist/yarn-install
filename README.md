@@ -77,9 +77,16 @@ Install globally, stands for `npm --global` or `yarn global`.
 ##### remove
 
 Type: `boolean`<br>
-Default: `false`
+Default: `undefined`
 
 The reversed behavior to `install`, ie. `yarn remove` and `npm uninstall`
+
+##### production
+
+Type: `boolean`<br>
+Default: `undefined`
+
+Only install `dependencies` in `package.json`.
 
 ## Contributing
 

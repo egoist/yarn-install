@@ -49,7 +49,10 @@ module.exports = function (deps, opts) {
       // yarn remove
       remove: opts.remove,
       // yarn --dev
-      '--dev': opts.dev
+      '--dev': opts.dev,
+      // yarn --production
+      // only install dependencies
+      '--production': opts.production
     })
   } else {
     args = getArgs({
@@ -61,7 +64,10 @@ module.exports = function (deps, opts) {
       // npm --save0dev
       '--save-dev': opts.dev,
       // npm --global
-      '--global': opts.global
+      '--global': opts.global,
+      // yarn --production
+      // only install dependencies
+      '--production': opts.production
     })
   }
 
