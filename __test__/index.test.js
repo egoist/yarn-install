@@ -1,28 +1,25 @@
+const fs = require('fs')
 const path = require('path')
 const execa = require('execa')
-const Pkg = require('update-pkg')
+const req = require('require-uncached')
 const install = require('../')
 
 const fixture = path.join(__dirname, 'fixture/')
 
 const requireFixturePkg = () => {
   const file = path.join(fixture, 'package.json')
-  return require(file)
+  return JSON.parse(fs.readFileSync(file, 'utf8'))
 }
 
-const requireInFixture = name => require(path.join(fixture, 'node_modules', name))
+const requireInFixture = name => req(path.join(fixture, 'node_modules', name))
 
 afterEach(() => {
   return execa('rm', [
     '-rf',
+    path.join(fixture, 'package.json'),
     path.join(fixture, 'node_modules'),
     path.join(fixture, 'yarn.lock')
-  ]).then(() => {
-    const pkg = new Pkg(fixture)
-    pkg.set('dependencies', undefined)
-    pkg.set('devDependences', undefined)
-    return pkg.save()
-  })
+  ])
 })
 
 test('save', () => {

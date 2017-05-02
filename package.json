@@ -32,7 +32,7 @@
     "eslint-config-egoist": "latest",
     "execa": "^0.5.0",
     "jest-cli": "^15.1.1",
-    "update-pkg": "^1.0.1"
+    "require-uncached": "^1.0.3"
   },
   "jest": {
     "testEnvironment": "node"
