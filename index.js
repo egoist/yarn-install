@@ -106,6 +106,7 @@ function checkNpmVersion() {
   const command = spawn.sync('npm', ['--version'])
   const majorVersion = command.stdout.toString().trim().split('.')[0]
   isNpm5 = majorVersion >= 5
+  return isNpm5
 }
 
 function getIsNpm5() {
