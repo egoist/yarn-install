@@ -14,11 +14,10 @@ cli
   .option('r, registry', 'Use custom registry')
 
 cli.command('*', 'Run yarn install with npm fallback', (input, flags) => {
-  let result
   if (input.length > 0) {
-    result = install(input, flags)
+    install(input, flags)
   } else {
-    result = install(flags)
+    install(flags)
   }
 })
 

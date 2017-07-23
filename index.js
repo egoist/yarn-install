@@ -5,6 +5,9 @@ const spawn = require('cross-spawn')
 // cache the install check result
 let yarnInstalled
 
+// cache npm version check result
+let isNpm5
+
 // const install = require('yarn-install)
 //
 // with dependencies
@@ -31,9 +34,9 @@ module.exports = function (deps, opts) {
   const cwd = opts.cwd
   const stdio = opts.stdio === undefined ? 'inherit' : opts.stdio
 
-  const isYarn = yarnInstalled === undefined ?
-    checkYarnInstalled() :
-    yarnInstalled
+  yarnInstalled = yarnInstalled === undefined ? checkYarnInstalled() : yarnInstalled
+
+  const isYarn = (opts.respectNpm5 && (isNpm5 = getIsNpm5())) ? false : yarnInstalled
 
   const command = isYarn ? 'yarn' : 'npm'
 
@@ -97,6 +100,16 @@ function checkYarnInstalled() {
   const installed = command.stdout && command.stdout.toString().trim()
   yarnInstalled = installed
   return installed
+}
+
+function checkNpmVersion() {
+  const command = spawn.sync('npm', ['--version'])
+  const majorVersion = command.stdout.toString().trim().split('.')[0]
+  isNpm5 = majorVersion >= 5
+}
+
+function getIsNpm5() {
+  return isNpm5 === undefined ? checkNpmVersion() : isNpm5
 }
 
 function getArgs(obj) {

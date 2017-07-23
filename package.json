@@ -13,7 +13,8 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "jest -i && eslint *.js __test__/*.js"
+    "test": "jest -i && npm run lint",
+    "lint": "xo"
   },
   "files": [
     "index.js",
@@ -28,19 +29,22 @@
     "install"
   ],
   "devDependencies": {
-    "eslint": "latest",
-    "eslint-config-egoist": "latest",
+    "eslint-config-rem": "^3.1.0",
     "execa": "^0.5.0",
     "jest-cli": "^15.1.1",
-    "require-uncached": "^1.0.3"
+    "require-uncached": "^1.0.3",
+    "xo": "^0.18.2"
   },
   "jest": {
     "testEnvironment": "node"
   },
-  "eslintConfig": {
-    "extends": "egoist/esnext",
-    "env": {
-      "jest": true
+  "xo": {
+    "extends": "rem",
+    "envs": [
+      "jest"
+    ],
+    "rules": {
+      "no-unused-expressions": 0
     }
   },
   "dependencies": {

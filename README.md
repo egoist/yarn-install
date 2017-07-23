@@ -88,6 +88,13 @@ Default: `undefined`
 
 Only install `dependencies` in `package.json`.
 
+##### respectNpm5
+
+Type: `boolean`<br>
+Default: `undefined`
+
+Use npm if it's >= npm5.
+
 ## Contributing
 
 1. Fork it!
