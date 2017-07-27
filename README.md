@@ -95,6 +95,28 @@ Default: `undefined`
 
 Use npm if it's >= npm5.
 
+### install.getPm([options])
+
+Get the package manager that will be used to install.
+
+#### options
+
+##### repectNpm5
+
+```js
+// Given you have yarn & npm 4 installed
+const pm = install.getPm()
+//=> yarn
+
+// Given you have yarn & npm 5 installed
+const pm = install.getPm()
+//=> yarn
+
+// Given you have yarn & npm 5 installed
+const pm = install.getPm({ respectNpm5: true })
+//=> npm
+```
+
 ## Contributing
 
 1. Fork it!

@@ -97,6 +97,11 @@ module.exports = function (deps, opts) {
 
 module.exports.yarnInstalled = yarnInstalled
 module.exports.isNpm5 = isNpm5
+module.exports.getPm = ({
+  respectNpm5
+} = {}) => {
+  return ((respectNpm5 && checkNpmVersion()) || !checkYarnInstalled()) ? 'npm' : 'yarn'
+}
 
 function checkYarnInstalled() {
   const command = spawn.sync('yarn', ['--version'])
