@@ -101,7 +101,7 @@ Get the package manager that will be used to install.
 
 #### options
 
-##### repectNpm5
+##### respectNpm5
 
 ```js
 // Given you have yarn & npm 4 installed
