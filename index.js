@@ -8,6 +8,12 @@ let yarnInstalled
 // cache npm version check result
 let isNpm5
 
+function getPm({
+  respectNpm5
+} = {}) {
+  return ((respectNpm5 && checkNpmVersion()) || !checkYarnInstalled()) ? 'npm' : 'yarn'
+}
+
 // const install = require('yarn-install)
 //
 // with dependencies
@@ -34,14 +40,10 @@ module.exports = function (deps, opts) {
   const cwd = opts.cwd
   const stdio = opts.stdio === undefined ? 'inherit' : opts.stdio
 
-  yarnInstalled = yarnInstalled === undefined ? checkYarnInstalled() : yarnInstalled
-
-  const isYarn = (opts.respectNpm5 && (isNpm5 = getIsNpm5())) ? false : yarnInstalled
-
-  const command = isYarn ? 'yarn' : 'npm'
+  const command = getPm({ respectNpm5: opts.respectNpm5 })
 
   let args
-  if (isYarn) {
+  if (command === 'yarn') {
     args = getArgs({
       // yarn global
       global: opts.global,
@@ -85,7 +87,7 @@ module.exports = function (deps, opts) {
   const result = spawn.sync(command, args, {
     stdio,
     cwd,
-    env: getEnv(opts, isYarn)
+    env: getEnv(opts, command === 'yarn')
   })
 
   // set the error code
@@ -97,13 +99,11 @@ module.exports = function (deps, opts) {
 
 module.exports.yarnInstalled = yarnInstalled
 module.exports.isNpm5 = isNpm5
-module.exports.getPm = ({
-  respectNpm5
-} = {}) => {
-  return ((respectNpm5 && checkNpmVersion()) || !checkYarnInstalled()) ? 'npm' : 'yarn'
-}
+module.exports.getPm = getPm
 
 function checkYarnInstalled() {
+  if (typeof yarnInstalled !== 'undefined') return yarnInstalled
+
   const command = spawn.sync('yarn', ['--version'])
   const installed = command.stdout && command.stdout.toString().trim()
   yarnInstalled = installed
@@ -111,14 +111,12 @@ function checkYarnInstalled() {
 }
 
 function checkNpmVersion() {
+  if (typeof isNpm5 !== 'undefined') return isNpm5
+
   const command = spawn.sync('npm', ['--version'])
   const majorVersion = command.stdout.toString().trim().split('.')[0]
   isNpm5 = majorVersion >= 5
   return isNpm5
-}
-
-function getIsNpm5() {
-  return isNpm5 === undefined ? checkNpmVersion() : isNpm5
 }
 
 function getArgs(obj) {
