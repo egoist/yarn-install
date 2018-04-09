@@ -14,33 +14,12 @@ function getPm({
   return ((respectNpm5 && checkNpmVersion()) || !checkYarnInstalled()) ? 'npm' : 'yarn'
 }
 
-// const install = require('yarn-install)
-//
-// with dependencies
-// install(['webpack', 'ava'], {saveDev: true})
-// install(['webpack', 'ava'], {save: true})
-// install(['webpack', 'ava'], {global: true})
-//
-// omit dependencies
-// it runs npm install or yarn install directly
-// install(options)
-//
-// remove dependencies
-// install(['webpack'], {remove: true})
-// install(['webpack'], {remove: true, global: true})
-module.exports = function (deps, opts) {
-  // first argument is not an array
-  // then treat it as opts
-  if (!Array.isArray(deps)) {
-    opts = deps
-    deps = null
-  }
-
-  opts = opts || {}
+module.exports = function (opts = {}) {
   const cwd = opts.cwd
   const stdio = opts.stdio === undefined ? 'inherit' : opts.stdio
 
   const command = getPm({ respectNpm5: opts.respectNpm5 })
+  const deps = (opts.deps && opts.deps.length > 0) ? opts.deps : null
 
   let args
   if (command === 'yarn') {
@@ -49,8 +28,6 @@ module.exports = function (deps, opts) {
       global: opts.global,
       // yarn add
       add: deps && !opts.remove,
-      // yarn install
-      install: !deps && !opts.remove,
       // yarn remove
       remove: opts.remove,
       // yarn --dev
@@ -120,7 +97,7 @@ function checkNpmVersion() {
 }
 
 function getArgs(obj) {
-  return Object.keys(obj).filter(name => obj[name])
+  return Object.keys(obj).filter(name => Boolean(obj[name]))
 }
 
 function getEnv(opts, isYarn) {

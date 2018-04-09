@@ -14,16 +14,20 @@ const requireFixturePkg = () => {
 const requireInFixture = name => req(path.join(fixture, 'node_modules', name))
 
 afterEach(() => {
+  fs.writeFileSync(path.join(fixture, 'package.json'), JSON.stringify({
+    private: true,
+    name: 'fixture'
+  }, null, 2), 'utf8')
   return execa('rm', [
     '-rf',
-    path.join(fixture, 'package.json'),
     path.join(fixture, 'node_modules'),
     path.join(fixture, 'yarn.lock')
   ])
 })
 
 test('save', () => {
-  install(['pokemon'], {
+  install({
+    deps: ['pokemon'],
     cwd: fixture,
     registry: 'https://registry.npm.taobao.org',
     showCommand: true
@@ -35,7 +39,8 @@ test('save', () => {
 })
 
 test('save dev', () => {
-  install(['pokemon'], {
+  install({
+    deps: ['pokemon'],
     cwd: fixture,
     dev: true,
     registry: 'https://registry.npm.taobao.org',

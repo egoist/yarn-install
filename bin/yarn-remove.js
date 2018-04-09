@@ -16,9 +16,10 @@ cli.command('*', 'Run yarn remove with npm fallback', (input, flags) => {
     throw new Error('Dependencies are required to run `remove` command')
   }
   const opts = Object.assign({
+    deps: input,
     remove: true
   }, flags)
-  install(input, opts)
+  install(opts)
 })
 
 cli.parse()

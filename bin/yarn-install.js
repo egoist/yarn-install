@@ -15,7 +15,7 @@ cli
 
 cli.command('*', 'Run yarn install with npm fallback', (input, flags) => {
   if (input.length > 0) {
-    install(input, flags)
+    install(Object.assign({ deps: input, flags }))
   } else {
     install(flags)
   }

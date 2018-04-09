@@ -13,7 +13,9 @@ $ npm install --save yarn-install
 ```js
 const install = require('yarn-install')
 
-const result = install(['webpack', 'mocha'])
+const result = install({
+  deps: ['webpack', 'mocha']
+})
 //=> result, returned by child_process.spawnSync
 ```
 
@@ -34,21 +36,21 @@ yarn-remove help
 
 ## API
 
-### install(dependencies, [options])
+### install([options])
 
-#### dependencies
+#### options
+
+##### deps
 
 Type: `array`
 
 An array of dependencies to install, you can omit it to install dependencies in `package.json`. If `dependencies` is present, it defaults to `--save` mode.
 
 ```js
-install(['ava', 'koa'], options)
-// or
-install(options)
+install({
+  deps: ['ava', 'koa']
+})
 ```
-
-#### options
 
 ##### cwd
 
