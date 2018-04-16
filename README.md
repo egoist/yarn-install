@@ -2,6 +2,8 @@
 
 If command `yarn` exists it uses Yarn to install, otherwise fallbacks to npm.
 
+> NOTE: to install packages in a directory, it's recommened to use [install-packages](https://github.com/egoist/install-packages) instead. In most cases that is a better choice.
+
 ## Install
 
 ```bash
